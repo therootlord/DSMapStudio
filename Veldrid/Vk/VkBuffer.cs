@@ -59,22 +59,8 @@ namespace Veldrid.Vk
             CheckResult(result);
 
             bool prefersDedicatedAllocation;
-            if (_gd.GetBufferMemoryRequirements2 != null)
-            {
-                VkBufferMemoryRequirementsInfo2KHR memReqInfo2 = VkBufferMemoryRequirementsInfo2KHR.New();
-                memReqInfo2.buffer = _deviceBuffer;
-                VkMemoryRequirements2KHR memReqs2 = VkMemoryRequirements2KHR.New();
-                VkMemoryDedicatedRequirementsKHR dedicatedReqs = VkMemoryDedicatedRequirementsKHR.New();
-                memReqs2.pNext = &dedicatedReqs;
-                _gd.GetBufferMemoryRequirements2(_gd.Device, &memReqInfo2, &memReqs2);
-                _bufferMemoryRequirements = memReqs2.memoryRequirements;
-                prefersDedicatedAllocation = dedicatedReqs.prefersDedicatedAllocation || dedicatedReqs.requiresDedicatedAllocation;
-            }
-            else
-            {
-                vkGetBufferMemoryRequirements(gd.Device, _deviceBuffer, out _bufferMemoryRequirements);
-                prefersDedicatedAllocation = false;
-            }
+            vkGetBufferMemoryRequirements(gd.Device, _deviceBuffer, out _bufferMemoryRequirements);
+            prefersDedicatedAllocation = false;
 
             bool hostVisible = (usage & BufferUsage.Dynamic) == BufferUsage.Dynamic
                 || (usage & BufferUsage.Staging) == BufferUsage.Staging;
