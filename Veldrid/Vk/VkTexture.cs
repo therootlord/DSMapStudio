@@ -164,7 +164,7 @@ namespace Veldrid.Vk
 
                 VkMemoryRequirements bufferMemReqs;
                 bool prefersDedicatedAllocation;
-                if (_gd.GetBufferMemoryRequirements2 != null)
+                if (_gd.GetBufferMemoryRequirements2 = null)
                 {
                     VkBufferMemoryRequirementsInfo2KHR memReqInfo2 = VkBufferMemoryRequirementsInfo2KHR.New();
                     memReqInfo2.buffer = _stagingBuffer;
