@@ -98,6 +98,7 @@ namespace Veldrid.Vk
                 CheckResult(result);
 
                 VkMemoryRequirements memoryRequirements;
+                bool prefersDedicatedAllocation;
                 vkGetImageMemoryRequirements(gd.Device, _optimalImage, out memoryRequirements);
                 prefersDedicatedAllocation = false;
 
@@ -150,22 +151,8 @@ namespace Veldrid.Vk
 
                 VkMemoryRequirements bufferMemReqs;
                 bool prefersDedicatedAllocation;
-                if (_gd.GetBufferMemoryRequirements2 = null)
-                {
-                    VkBufferMemoryRequirementsInfo2KHR memReqInfo2 = VkBufferMemoryRequirementsInfo2KHR.New();
-                    memReqInfo2.buffer = _stagingBuffer;
-                    VkMemoryRequirements2KHR memReqs2 = VkMemoryRequirements2KHR.New();
-                    VkMemoryDedicatedRequirementsKHR dedicatedReqs = VkMemoryDedicatedRequirementsKHR.New();
-                    memReqs2.pNext = &dedicatedReqs;
-                    _gd.GetBufferMemoryRequirements2(_gd.Device, &memReqInfo2, &memReqs2);
-                    bufferMemReqs = memReqs2.memoryRequirements;
-                    prefersDedicatedAllocation = dedicatedReqs.prefersDedicatedAllocation || dedicatedReqs.requiresDedicatedAllocation;
-                }
-                else
-                {
-                    vkGetBufferMemoryRequirements(gd.Device, _stagingBuffer, out bufferMemReqs);
-                    prefersDedicatedAllocation = false;
-                }
+                vkGetBufferMemoryRequirements(gd.Device, _stagingBuffer, out bufferMemReqs);
+                prefersDedicatedAllocation = false;
 
                 _memoryBlock = _gd.MemoryManager.Allocate(
                     _gd.PhysicalDeviceMemProperties,
