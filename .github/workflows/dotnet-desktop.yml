@@ -82,7 +82,7 @@ jobs:
 #        Configuration: ${{ matrix.configuration }}
 
     - name: publish the app
-      run : dotnet publish -c Release DSMapStudio /p:PublishDir=meu
+      run : dotnet publish DSMapStudio /p:PublishDir=meu
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-artifact
     - name: Upload build artifacts
