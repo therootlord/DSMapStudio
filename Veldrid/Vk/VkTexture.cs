@@ -98,23 +98,9 @@ namespace Veldrid.Vk
                 CheckResult(result);
 
                 VkMemoryRequirements memoryRequirements;
-                bool prefersDedicatedAllocation;
-                if (_gd.GetImageMemoryRequirements2 != null)
-                {
-                    VkImageMemoryRequirementsInfo2KHR memReqsInfo2 = VkImageMemoryRequirementsInfo2KHR.New();
-                    memReqsInfo2.image = _optimalImage;
-                    VkMemoryRequirements2KHR memReqs2 = VkMemoryRequirements2KHR.New();
-                    VkMemoryDedicatedRequirementsKHR dedicatedReqs = VkMemoryDedicatedRequirementsKHR.New();
-                    memReqs2.pNext = &dedicatedReqs;
-                    _gd.GetImageMemoryRequirements2(_gd.Device, &memReqsInfo2, &memReqs2);
-                    memoryRequirements = memReqs2.memoryRequirements;
-                    prefersDedicatedAllocation = dedicatedReqs.prefersDedicatedAllocation || dedicatedReqs.requiresDedicatedAllocation;
-                }
-                else
-                {
-                    vkGetImageMemoryRequirements(gd.Device, _optimalImage, out memoryRequirements);
-                    prefersDedicatedAllocation = false;
-                }
+                vkGetImageMemoryRequirements(gd.Device, _optimalImage, out memoryRequirements);
+                prefersDedicatedAllocation = false;
+
 
                 VkMemoryBlock memoryToken = gd.MemoryManager.Allocate(
                     gd.PhysicalDeviceMemProperties,
